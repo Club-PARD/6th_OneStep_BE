@@ -95,6 +95,6 @@ public class PurchaseService {
                 ))
                 .toList();
         
-        return new CouponListResponse(coupons, coupons.size());
+        return new CouponListResponse(coupons);
     }
 }

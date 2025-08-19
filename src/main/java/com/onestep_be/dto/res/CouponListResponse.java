@@ -11,10 +11,7 @@ import java.util.List;
 public record CouponListResponse(
     
     @Schema(description = "쿠폰 목록")
-    List<CouponResponse> coupons,
-    
-    @Schema(description = "총 쿠폰 개수", example = "5")
-    int totalCoupons
+    List<CouponResponse> coupons
     
 ) {
 }
