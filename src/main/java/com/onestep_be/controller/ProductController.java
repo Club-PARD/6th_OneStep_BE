@@ -22,46 +22,46 @@ public class ProductController {
 
     @Operation(summary = "서버 테스트용")
     @GetMapping("/categories/{categoryId}")
-    public ResponseEntity<List<ProductResponse>> getProductsByCategory(
+    public ResponseEntity<List<ProductResponse.Product>> getProductsByCategory(
             @PathVariable Long categoryId) {
         
-        List<ProductResponse> products = productService.getProductsByCategory(categoryId);
+        List<ProductResponse.Product> products = productService.getProductsByCategory(categoryId);
         return ResponseEntity.ok(products);
     }
 
     @Operation(summary = "구매 가능한 상품 조회 (가나다순)")
     @GetMapping("/affordable")
-    public ResponseEntity<List<ProductResponse>> getAffordableProducts(
+    public ResponseEntity<List<ProductResponse.Product>> getAffordableProducts(
             @RequestHeader("Apple-Token") String appleToken) {
         
-        List<ProductResponse> products = productService.getAffordableProducts(appleToken);
+        List<ProductResponse.Product> products = productService.getAffordableProducts(appleToken);
         return ResponseEntity.ok(products);
     }
 
     @Operation(summary = "카테고리별 인기 상품 조회 (기본조회)")
     @GetMapping("/categories/{categoryId}/popular")
-    public ResponseEntity<List<ProductResponse>> getPopularProductsByCategory(
+    public ResponseEntity<List<ProductResponse.Product>> getPopularProductsByCategory(
             @PathVariable Long categoryId) {
         
-        List<ProductResponse> products = productService.getPopularProductsByCategory(categoryId);
+        List<ProductResponse.Product> products = productService.getPopularProductsByCategory(categoryId);
         return ResponseEntity.ok(products);
     }
 
     @Operation(summary = "카테고리별 상품 조회 (가격 낮은순)")
     @GetMapping("/categories/{categoryId}/price-low")
-    public ResponseEntity<List<ProductResponse>> getProductsByCategoryOrderByPriceLow(
+    public ResponseEntity<List<ProductResponse.Product>> getProductsByCategoryOrderByPriceLow(
             @PathVariable Long categoryId) {
         
-        List<ProductResponse> products = productService.getProductsByCategoryOrderByPriceLow(categoryId);
+        List<ProductResponse.Product> products = productService.getProductsByCategoryOrderByPriceLow(categoryId);
         return ResponseEntity.ok(products);
     }
 
     @Operation(summary = "카테고리별 상품 조회 (가격 높은순)")
     @GetMapping("/categories/{categoryId}/price-high")
-    public ResponseEntity<List<ProductResponse>> getProductsByCategoryOrderByPriceHigh(
+    public ResponseEntity<List<ProductResponse.Product>> getProductsByCategoryOrderByPriceHigh(
             @PathVariable Long categoryId) {
         
-        List<ProductResponse> products = productService.getProductsByCategoryOrderByPriceHigh(categoryId);
+        List<ProductResponse.Product> products = productService.getProductsByCategoryOrderByPriceHigh(categoryId);
         return ResponseEntity.ok(products);
     }
 }

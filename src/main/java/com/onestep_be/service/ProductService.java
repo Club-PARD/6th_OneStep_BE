@@ -30,11 +30,11 @@ public class ProductService {
     /**
      * 카테고리별 상품 조회
      */
-    public List<ProductResponse> getProductsByCategory(Long categoryId) {
+    public List<ProductResponse.Product> getProductsByCategory(Long categoryId) {
         List<Product> products = productRepository.findByCategoryId(categoryId);
         
         return products.stream()
-                .map(product -> new ProductResponse(
+                .map(product -> new ProductResponse.Product(
                         product.getId(),
                         product.getProductName(),
                         product.getBrandName(),
@@ -48,7 +48,7 @@ public class ProductService {
     /**
      * 사용자 코인으로 구매 가능한 상품 조회 (가나다순 정렬)
      */
-    public List<ProductResponse> getAffordableProducts(String appleToken) {
+    public List<ProductResponse.Product> getAffordableProducts(String appleToken) {
         // 사용자 조회
         User user = userRepository.findByAppleToken(appleToken)
                 .orElseThrow(() -> GlobalException.notFound("사용자"));
@@ -57,7 +57,7 @@ public class ProductService {
         List<Product> products = productRepository.findByCoinPriceLessThanEqual(user.getHaveCoin());
         
         return products.stream()
-                .map(product -> new ProductResponse(
+                .map(product -> new ProductResponse.Product(
                         product.getId(),
                         product.getProductName(),
                         product.getBrandName(),
@@ -72,11 +72,11 @@ public class ProductService {
     /**
      * 카테고리별 인기 상품 조회 (구매횟수 내림차순)
      */
-    public List<ProductResponse> getPopularProductsByCategory(Long categoryId) {
+    public List<ProductResponse.Product> getPopularProductsByCategory(Long categoryId) {
         List<Product> products = productRepository.findByCategoryIdOrderByPurchaseCountDesc(categoryId);
         
         return products.stream()
-                .map(product -> new ProductResponse(
+                .map(product -> new ProductResponse.Product(
                         product.getId(),
                         product.getProductName(),
                         product.getBrandName(),
@@ -90,11 +90,11 @@ public class ProductService {
     /**
      * 카테고리별 상품 조회 (가격 낮은순)
      */
-    public List<ProductResponse> getProductsByCategoryOrderByPriceLow(Long categoryId) {
+    public List<ProductResponse.Product> getProductsByCategoryOrderByPriceLow(Long categoryId) {
         List<Product> products = productRepository.findByCategoryIdOrderByCoinPriceAsc(categoryId);
         
         return products.stream()
-                .map(product -> new ProductResponse(
+                .map(product -> new ProductResponse.Product(
                         product.getId(),
                         product.getProductName(),
                         product.getBrandName(),
@@ -108,11 +108,11 @@ public class ProductService {
     /**
      * 카테고리별 상품 조회 (가격 높은순)
      */
-    public List<ProductResponse> getProductsByCategoryOrderByPriceHigh(Long categoryId) {
+    public List<ProductResponse.Product> getProductsByCategoryOrderByPriceHigh(Long categoryId) {
         List<Product> products = productRepository.findByCategoryIdOrderByCoinPriceDesc(categoryId);
         
         return products.stream()
-                .map(product -> new ProductResponse(
+                .map(product -> new ProductResponse.Product(
                         product.getId(),
                         product.getProductName(),
                         product.getBrandName(),

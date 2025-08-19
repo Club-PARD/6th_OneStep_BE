@@ -1,7 +1,7 @@
 package com.onestep_be.controller;
 
-import com.onestep_be.dto.res.CouponListResponse;
-import com.onestep_be.dto.res.PurchaseResponse;
+import com.onestep_be.dto.res.CouponResponse;
+import com.onestep_be.dto.res.ProductResponse;
 import com.onestep_be.service.PurchaseService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -19,20 +19,20 @@ public class PurchaseController {
 
     @Operation(summary = "상품 구매")
     @PostMapping("/products/{productId}")
-    public ResponseEntity<PurchaseResponse> purchaseProduct(
+    public ResponseEntity<ProductResponse.Purchase> purchaseProduct(
             @PathVariable Long productId,
             @RequestHeader("Apple-Token") String appleToken) {
         
-        PurchaseResponse response = purchaseService.purchaseProduct(productId, appleToken);
+        ProductResponse.Purchase response = purchaseService.purchaseProduct(productId, appleToken);
         return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "사용자 쿠폰 목록 조회")
     @GetMapping("/coupons")
-    public ResponseEntity<CouponListResponse> getUserCoupons(
+    public ResponseEntity<CouponResponse.CouponList> getUserCoupons(
             @RequestHeader("Apple-Token") String appleToken) {
         
-        CouponListResponse response = purchaseService.getUserCoupons(appleToken);
+        CouponResponse.CouponList response = purchaseService.getUserCoupons(appleToken);
         return ResponseEntity.ok(response);
     }
 }

@@ -1,8 +1,7 @@
 package com.onestep_be.service;
 
-import com.onestep_be.dto.res.CouponListResponse;
 import com.onestep_be.dto.res.CouponResponse;
-import com.onestep_be.dto.res.PurchaseResponse;
+import com.onestep_be.dto.res.ProductResponse;
 import com.onestep_be.entity.Product;
 import com.onestep_be.entity.Purchase;
 import com.onestep_be.entity.User;
@@ -34,7 +33,7 @@ public class PurchaseService {
      * 상품 구매
      */
     @Transactional
-    public PurchaseResponse purchaseProduct(Long productId, String appleToken) {
+    public ProductResponse.Purchase purchaseProduct(Long productId, String appleToken) {
         // 사용자 조회
         User user = userRepository.findByAppleToken(appleToken)
                 .orElseThrow(() -> GlobalException.notFound("사용자"));
@@ -45,7 +44,7 @@ public class PurchaseService {
         
         // 코인 부족 확인
         if (user.getHaveCoin() < product.getCoinPrice()) {
-            return new PurchaseResponse(false, null, user.getHaveCoin());
+            return new ProductResponse.Purchase(false, null, user.getHaveCoin());
         }
         
         // 코인 차감
@@ -70,13 +69,13 @@ public class PurchaseService {
         log.info("상품 구매 완료: 사용자={}, 상품={}, 가격={}, 남은코인={}", 
                 user.getId(), product.getId(), product.getCoinPrice(), user.getHaveCoin());
         
-        return new PurchaseResponse(true, BARCODE_IMAGE_URL, user.getHaveCoin());
+        return new ProductResponse.Purchase(true, BARCODE_IMAGE_URL, user.getHaveCoin());
     }
 
     /**
      * 사용자 쿠폰 목록 조회
      */
-    public CouponListResponse getUserCoupons(String appleToken) {
+    public CouponResponse.CouponList getUserCoupons(String appleToken) {
         // 사용자 조회
         User user = userRepository.findByAppleToken(appleToken)
                 .orElseThrow(() -> GlobalException.notFound("사용자"));
@@ -84,8 +83,8 @@ public class PurchaseService {
         // 사용자 구매 내역 조회
         List<Purchase> purchases = purchaseRepository.findByUserId(user.getId());
         
-        List<CouponResponse> coupons = purchases.stream()
-                .map(purchase -> new CouponResponse(
+        List<CouponResponse.Coupon> coupons = purchases.stream()
+                .map(purchase -> new CouponResponse.Coupon(
                         purchase.getId(),
                         purchase.getProduct().getProductName(),
                         purchase.getProduct().getBrandName(),
@@ -95,6 +94,6 @@ public class PurchaseService {
                 ))
                 .toList();
         
-        return new CouponListResponse(coupons);
+        return new CouponResponse.CouponList(coupons);
     }
 }
