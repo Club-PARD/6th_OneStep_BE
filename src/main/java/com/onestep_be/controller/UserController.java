@@ -1,7 +1,7 @@
 package com.onestep_be.controller;
 
 import com.onestep_be.dto.req.UserLoginRequest;
-import com.onestep_be.dto.res.MissionDaysResponse;
+import com.onestep_be.dto.res.MissionResponse;
 import com.onestep_be.dto.res.UserCoinResponse;
 import com.onestep_be.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,10 +34,10 @@ public class UserController {
 
     @Operation(summary = "미션 완료 일수 조회 + 이름 조회")
     @GetMapping("/mission-days")
-    public ResponseEntity<MissionDaysResponse> getMissionDays(
+    public ResponseEntity<MissionResponse.Days> getMissionDays(
             @RequestHeader("Apple-Token") String appleToken) {
         
-        MissionDaysResponse response = userService.getMissionDays(appleToken);
+        MissionResponse.Days response = userService.getMissionDays(appleToken);
         return ResponseEntity.ok(response);
     }
     

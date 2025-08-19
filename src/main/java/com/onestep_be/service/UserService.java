@@ -1,7 +1,7 @@
 package com.onestep_be.service;
 
 import com.onestep_be.dto.req.UserLoginRequest;
-import com.onestep_be.dto.res.MissionDaysResponse;
+import com.onestep_be.dto.res.MissionResponse;
 import com.onestep_be.dto.res.UserCoinResponse;
 import com.onestep_be.entity.Product;
 import com.onestep_be.entity.User;
@@ -47,11 +47,11 @@ public class UserService {
     /**
      * 사용자 미션 완료 일수 조회 (User 테이블에서 직접 조회)
      */
-    public MissionDaysResponse getMissionDays(String appleToken) {
+    public MissionResponse.Days getMissionDays(String appleToken) {
         User user = userRepository.findByAppleToken(appleToken)
                 .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다"));
         
-        return new MissionDaysResponse(user.getName(), user.getMissionStreakDays());
+        return new MissionResponse.Days(user.getName(), user.getMissionStreakDays());
     }
     
     /**

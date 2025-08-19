@@ -1,7 +1,6 @@
 package com.onestep_be.service;
 
 import com.onestep_be.dto.res.MissionResponse;
-import com.onestep_be.dto.res.MissionCompletionResponse;
 import java.util.Set;
 import java.util.stream.Collectors;
 import com.onestep_be.entity.Mission;
@@ -37,15 +36,14 @@ public class MissionService {
     /**
      * 사용자별 미션 목록 조회 (홈 화면용) - 모든 미션 표시
      */
-    public List<MissionResponse> getUserMissions(String appleToken) {
+    public List<MissionResponse.Mission> getUserMissions(String appleToken) {
         // 사용자 조회
-        User user = userRepository.findByAppleToken(appleToken)
-                .orElseThrow(() -> GlobalException.notFound("사용자"));
-
+        User user = validateUser(appleToken);
+        
         // 모든 미션 조회
         List<Mission> allMissions = missionRepository.findAll();
         
-        // 사용자의 미션 완료 기록 조회
+        // 사용자가 완료한 미션 조회
         List<MissionCompletion> missionCompletions = missionCompletionRepository.findByUserId(user.getId());
         
         // 완료된 미션 ID를 Set으로 변환 (빠른 검색을 위해)
@@ -55,7 +53,7 @@ public class MissionService {
         
         // 모든 미션에 대해 완료 여부를 확인하여 응답 생성
         return allMissions.stream()
-                .map(mission -> MissionResponse.of(
+                .map(mission -> MissionResponse.Mission.of(
                         mission.getId(),
                         mission.getTitle(),
                         mission.getRewardCoin(),
@@ -68,7 +66,7 @@ public class MissionService {
      * 미션 완료 제출
      */
     @Transactional
-    public MissionCompletionResponse completeMission(Long missionId, String appleToken, MultipartFile imageFile) {
+    public MissionResponse.Completion completeMission(Long missionId, String appleToken, MultipartFile imageFile) {
         User user = validateUser(appleToken);
         Mission mission = validateMission(missionId);
         
@@ -86,7 +84,7 @@ public class MissionService {
         log.info("미션 완료: 사용자={}, 미션={}, 보상코인={}", 
                 user.getId(), mission.getId(), mission.getRewardCoin());
         
-        return MissionCompletionResponse.success(
+        return MissionResponse.Completion.success(
                 mission.getRewardCoin(), 
                 uploadedImageUrl
         );

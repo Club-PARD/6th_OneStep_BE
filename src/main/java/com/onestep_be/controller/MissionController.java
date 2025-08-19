@@ -1,8 +1,6 @@
 package com.onestep_be.controller;
 
 import com.onestep_be.dto.res.MissionResponse;
-import com.onestep_be.dto.res.MissionCompletionResponse;
-import com.onestep_be.dto.res.MissionCompletionImageListResponse;
 import com.onestep_be.service.MissionService;
 import com.onestep_be.service.MissionCompletionService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,21 +23,21 @@ public class MissionController {
 
     @Operation(summary = "사용자 미션 목록 조회")
     @GetMapping
-    public ResponseEntity<List<MissionResponse>> getUserMissions(
+    public ResponseEntity<List<MissionResponse.Mission>> getUserMissions(
             @RequestHeader("Apple-Token") String appleToken) {
         
-        List<MissionResponse> missions = missionService.getUserMissions(appleToken);
+        List<MissionResponse.Mission> missions = missionService.getUserMissions(appleToken);
         return ResponseEntity.ok(missions);
     }
     
     @Operation(summary = "미션 완료 인증")
     @PostMapping(value = "/{missionId}/complete", consumes = "multipart/form-data")
-    public ResponseEntity<MissionCompletionResponse> completeMission(
+    public ResponseEntity<MissionResponse.Completion> completeMission(
             @PathVariable Long missionId,
             @RequestHeader("Apple-Token") String appleToken,
             @RequestParam("image") MultipartFile image) {
         
-        MissionCompletionResponse response = missionService.completeMission(missionId, appleToken, image);
+        MissionResponse.Completion response = missionService.completeMission(missionId, appleToken, image);
         return ResponseEntity.ok(response);
     }
     
@@ -48,11 +46,10 @@ public class MissionController {
             description = "애플 토큰으로 사용자를 찾아 해당 사용자의 미션 완료 이미지들을 최신순으로 반환합니다."
     )
     @GetMapping("/completion-images")
-    public ResponseEntity<MissionCompletionImageListResponse> getUserMissionImages(
+    public ResponseEntity<MissionResponse.CompletionImageList> getMissionCompletionImages(
             @RequestHeader("Apple-Token") String appleToken) {
         
-        MissionCompletionImageListResponse response = missionCompletionService
-                .getUserMissionImages(appleToken);
+        MissionResponse.CompletionImageList response = missionCompletionService.getUserMissionCompletionImages(appleToken);
         
         return ResponseEntity.ok(response);
     }

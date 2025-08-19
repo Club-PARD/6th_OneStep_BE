@@ -1,7 +1,6 @@
 package com.onestep_be.service;
 
-import com.onestep_be.dto.res.MissionCompletionImageListResponse;
-import com.onestep_be.dto.res.MissionCompletionImageResponse;
+import com.onestep_be.dto.res.MissionResponse;
 import com.onestep_be.entity.MissionCompletion;
 import com.onestep_be.entity.User;
 import com.onestep_be.repository.MissionCompletionRepository;
@@ -25,7 +24,7 @@ public class MissionCompletionService {
     /**
      * 사용자의 미션 완료 이미지 목록 조회 (최신순)
      */
-    public MissionCompletionImageListResponse getUserMissionImages(String appleToken) {
+    public MissionResponse.CompletionImageList getUserMissionCompletionImages(String appleToken) {
         // 사용자 조회
         User user = userRepository.findByAppleToken(appleToken)
                 .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다"));
@@ -35,14 +34,14 @@ public class MissionCompletionService {
                 .findByUserIdOrderByCompletedAtDesc(user.getId());
 
         // DTO 변환
-        List<MissionCompletionImageResponse> imageResponses = completions.stream()
+        List<MissionResponse.CompletionImage> imageResponses = completions.stream()
                 .map(this::convertToImageResponse)
                 .toList();
 
         log.info("사용자 미션 완료 이미지 조회: userId={}, 이미지 개수={}", 
                 user.getId(), imageResponses.size());
 
-        return MissionCompletionImageListResponse.builder()
+        return MissionResponse.CompletionImageList.builder()
                 .images(imageResponses)
                 .build();
     }
@@ -50,8 +49,8 @@ public class MissionCompletionService {
     /**
      * MissionCompletion을 MissionCompletionImageResponse로 변환
      */
-    private MissionCompletionImageResponse convertToImageResponse(MissionCompletion completion) {
-        return MissionCompletionImageResponse.builder()
+    private MissionResponse.CompletionImage convertToImageResponse(MissionCompletion completion) {
+        return MissionResponse.CompletionImage.builder()
                 .completionId(completion.getId())
                 .missionTitle(completion.getMission().getTitle())
                 .imageUrl(completion.getSubmittedImageUrl())
