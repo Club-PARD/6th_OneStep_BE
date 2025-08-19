@@ -44,7 +44,6 @@ public class MissionCompletionService {
 
         return MissionCompletionImageListResponse.builder()
                 .images(imageResponses)
-                .totalCount(imageResponses.size())
                 .build();
     }
 
@@ -56,7 +55,6 @@ public class MissionCompletionService {
                 .completionId(completion.getId())
                 .missionTitle(completion.getMission().getTitle())
                 .imageUrl(completion.getSubmittedImageUrl())
-                .completedAt(completion.getCompletedAt())
                 .build();
     }
 }
