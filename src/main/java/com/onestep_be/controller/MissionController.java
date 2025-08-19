@@ -2,7 +2,9 @@ package com.onestep_be.controller;
 
 import com.onestep_be.dto.res.MissionResponse;
 import com.onestep_be.dto.res.MissionCompletionResponse;
+import com.onestep_be.dto.res.MissionCompletionImageListResponse;
 import com.onestep_be.service.MissionService;
+import com.onestep_be.service.MissionCompletionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,7 @@ import java.util.List;
 public class MissionController {
 
     private final MissionService missionService;
+    private final MissionCompletionService missionCompletionService;
 
     @Operation(summary = "사용자 미션 목록 조회")
     @GetMapping
@@ -37,6 +40,20 @@ public class MissionController {
             @RequestParam("image") MultipartFile image) {
         
         MissionCompletionResponse response = missionService.completeMission(missionId, appleToken, image);
+        return ResponseEntity.ok(response);
+    }
+    
+    @Operation(
+            summary = "사용자 미션 완료 이미지 목록 조회",
+            description = "애플 토큰으로 사용자를 찾아 해당 사용자의 미션 완료 이미지들을 최신순으로 반환합니다."
+    )
+    @GetMapping("/completion-images")
+    public ResponseEntity<MissionCompletionImageListResponse> getUserMissionImages(
+            @RequestHeader("Apple-Token") String appleToken) {
+        
+        MissionCompletionImageListResponse response = missionCompletionService
+                .getUserMissionImages(appleToken);
+        
         return ResponseEntity.ok(response);
     }
 }

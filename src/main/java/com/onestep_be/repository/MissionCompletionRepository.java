@@ -17,6 +17,11 @@ public interface MissionCompletionRepository extends JpaRepository<MissionComple
     List<MissionCompletion> findByUserId(Long userId);
     
     /**
+     * 특정 사용자의 미션 완료 기록을 완료 시간 내림차순으로 조회 (최신순)
+     */
+    List<MissionCompletion> findByUserIdOrderByCompletedAtDesc(Long userId);
+    
+    /**
      * 특정 사용자의 특정 미션 완료 기록 조회
      */
     Optional<MissionCompletion> findByUserIdAndMissionId(Long userId, Long missionId);

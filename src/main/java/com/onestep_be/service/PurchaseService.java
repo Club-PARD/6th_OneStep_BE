@@ -27,7 +27,7 @@ public class PurchaseService {
     private final ProductRepository productRepository;
     private final PurchaseRepository purchaseRepository;
     
-    // 고정 바코드 이미지 URL (DB에서 관리하거나 설정파일로 관리 가능)
+    // 고정 바코드 이미지 URL 
     private static final String BARCODE_IMAGE_URL = "https://onestep-mission-images.s3.ap-northeast-2.amazonaws.com/Frame+2085666593+(1).png";
 
     /**
